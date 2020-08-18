@@ -1,0 +1,75 @@
+/*
+ * If not stated otherwise in this file or this component's license file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2020 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+#include <stdio.h>
+#include <map>
+#include <string>
+#include <cjson/cJSON.h>
+#include <string.h>
+#include <cmath>
+#ifndef __LATENCY_REPORT_H__
+#define __LATENCY_REPORT_H__
+
+
+typedef std::map<std::string, unsigned int>  MapLatencyReport; // Latency Report stats for each profile
+
+class CLatencyReport
+{
+private:
+	bool isInitialized;
+	MapLatencyReport mLatencyReportMap;
+public:
+	CLatencyReport() : isInitialized(false), mLatencyReportMap()
+	{
+	}
+
+	/**
+	 *   @brief  Increments License stat count
+	 *   @param[in]  time window
+	 *   @return None
+	 */
+	void IncrementCount(std::string window);
+
+	/**
+	 *   @brief Calculates time window for latency report
+	 *   @param[in]  time value
+	 *   @return string time window tag.
+	 */
+	std::string GetTimeWindow(long timeMs);
+
+	/**
+	 *   @brief  Converts class object data to Json object
+	 *   @param[in]  NONE
+	 *   @return cJSON pointer
+	 */
+	cJSON * ToJson() const;
+
+	/**
+	 *   @brief Record Latency Report
+	 *   @param[in]  time in milli seconds
+	 *
+	 *   @return NONE.
+	 */
+	void RecordLatency(long timeMs);
+};
+
+
+
+
+#endif /* __LATENCY_REPORT_H__ */
