@@ -17,6 +17,9 @@
 cmake_minimum_required (VERSION 2.8)
 project (Metrics)
 
+pkg_check_modules(LIBCJSON REQUIRED libcjson)
+include_directories(${LIBCJSON_INCLUDE_DIRS})
+
 set(LIB_SOURCES IPHTTPStatistics.cpp
 	    IPLicnsStatistics.cpp
 	    IPFragmentStatistics.cpp
