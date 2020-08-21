@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 
-#include "LicnsStatistics.h"
+#include "IPLicnsStatistics.h"
 
 #define TAG_TOTAL_ROTATIONS			"r"  	// Total License rotation or stream switches
 #define TAG_TOTAL_ENCRYPTED_TO_CLEAR		"e"		// Total Encrypted to Clear Switch

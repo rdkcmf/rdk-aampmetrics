@@ -17,19 +17,19 @@
 cmake_minimum_required (VERSION 2.8)
 project (Metrics)
 
-set(LIB_SOURCES HTTPStatistics.cpp
-	    LicnsStatistics.cpp
-	    FragmentStatistics.cpp
-	    VideoStat.cpp
-	    ProfileInfo.cpp
-	    SessionSummary.cpp
-	    LatencyReport.cpp)
+set(LIB_SOURCES IPHTTPStatistics.cpp
+	    IPLicnsStatistics.cpp
+	    IPFragmentStatistics.cpp
+	    IPVideoStat.cpp
+	    IPProfileInfo.cpp
+	    IPSessionSummary.cpp
+	    IPLatencyReport.cpp)
 
 add_library(metrics SHARED ${LIB_SOURCES})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC -std=c++11 -Wno-multichar")
 target_link_libraries(metrics "-lcjson")
 
-set_target_properties(metrics PROPERTIES PUBLIC_HEADER "VideoStat.h")
+set_target_properties(metrics PROPERTIES PUBLIC_HEADER "IPVideoStat.h")
 install(TARGETS metrics DESTINATION lib PUBLIC_HEADER DESTINATION include)
-install(FILES HTTPStatistics.h FragmentStatistics.h LicnsStatistics.h ProfileInfo.h SessionSummary.h LatencyReport.h DESTINATION include)
+install(FILES IPHTTPStatistics.h IPFragmentStatistics.h IPLicnsStatistics.h IPProfileInfo.h IPSessionSummary.h IPLatencyReport.h DESTINATION include)

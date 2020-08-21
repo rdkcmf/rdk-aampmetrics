@@ -20,8 +20,8 @@
 #ifndef __HTTP_STATISTICS_H__
 #define __HTTP_STATISTICS_H__
 
-#include "LatencyReport.h"
-#include "SessionSummary.h"
+#include "IPLatencyReport.h"
+#include "IPSessionSummary.h"
 
 #define COUNT_NONE	0
 #define VIDEO_END_DATA_VERSION		"2.0"

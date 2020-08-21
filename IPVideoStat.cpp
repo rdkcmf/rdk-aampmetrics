@@ -22,7 +22,7 @@
  * @brief VideoStat data packing and storage
  */
 
-#include "VideoStat.h"
+#include "IPVideoStat.h"
 
 #include <iostream>
 #include <algorithm>

@@ -23,8 +23,8 @@
 #ifndef __PROFILEINFO_H__
 #define __PROFILEINFO_H__
 
-#include "FragmentStatistics.h"
-#include "LicnsStatistics.h"
+#include "IPFragmentStatistics.h"
+#include "IPLicnsStatistics.h"
 
 /*
  *  Stores Track types, With respect to Video Stat

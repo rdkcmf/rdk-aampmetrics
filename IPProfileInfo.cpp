@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 
-#include "ProfileInfo.h"
+#include "IPProfileInfo.h"
 
 #define TAG_MANIFEST_STAT	"ms"	// Manifest Stats
 #define TAG_FRAGMENT_STAT	"fs"	// Fragment Stats

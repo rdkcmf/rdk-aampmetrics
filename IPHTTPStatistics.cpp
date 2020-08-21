@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 
-#include "HTTPStatistics.h"
+#include "IPHTTPStatistics.h"
 
 /**
  *   @brief  Increment stat count

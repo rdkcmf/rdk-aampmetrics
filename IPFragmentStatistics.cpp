@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 
-#include "FragmentStatistics.h"
+#include "IPFragmentStatistics.h"
 
 #define TAG_URL				"u"	// URL of last failed download
 #define TAG_NORMAL_FRAGMENT_STAT	"n"	// Normal Fragment Stats

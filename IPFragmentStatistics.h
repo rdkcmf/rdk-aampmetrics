@@ -20,7 +20,7 @@
 #ifndef __FRAGMENT_STATISTICS_H__
 #define __FRAGMENT_STATISTICS_H__
 
-#include "HTTPStatistics.h"
+#include "IPHTTPStatistics.h"
 
 
 class CFragmentStatistics

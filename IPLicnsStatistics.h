@@ -23,7 +23,7 @@
 #ifndef __LICENSE_STATISTICS_H__
 #define __LICENSE_STATISTICS_H__
 
-#include "HTTPStatistics.h"
+#include "IPHTTPStatistics.h"
 
 class CLicenseStatistics
 {

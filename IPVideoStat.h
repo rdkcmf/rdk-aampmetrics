@@ -25,7 +25,7 @@
 #ifndef __VIDEO_STAT_H__
 #define __VIDEO_STAT_H__
 
-#include "ProfileInfo.h"
+#include "IPProfileInfo.h"
 
 // Map of profile bitrate(Bits per sec) and CProfileInfo
 // 0 is reserved for Main HLS manifest or DASH manifest

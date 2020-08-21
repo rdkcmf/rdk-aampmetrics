@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 
-#include "LatencyReport.h"
+#include "IPLatencyReport.h"
 
 #define TAG_LATENCY_REPORT		"l"  	// Latency report tag
 #define TAG_TIME_WINDOW_PREFIX		"T"	// Time window prefix
