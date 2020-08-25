@@ -185,11 +185,9 @@ char * CVideoStat::ToJsonString(const char* additionalData) const
 								while(childBitrates)
 								{
 									// data collection
-									char* bitrateData = cJSON_PrintUnformatted(childBitrates);
 									// Add fog data one by one to aamp profiles.
-									cJSON_AddItemToObject(profiles, childBitrates->string, cJSON_CreateString(bitrateData));
+									cJSON_AddItemReferenceToObject(profiles, childBitrates->string, childBitrates);
 									isDataAdded = true;
-									free(bitrateData);
 									childBitrates = childBitrates->next;
 								}
 							}
