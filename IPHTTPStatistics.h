@@ -103,6 +103,7 @@ public:
 				mLatencyReport = NULL;
 			}
 		}
+		return *this;
 	}
 
 	/**
