@@ -61,6 +61,7 @@ private:
 	CFragmentStatistics * mpFragmentStat;
 	int mWidth; // Frame width
 	int mHeight; // Frame height
+	bool mCappedProfile; // profile capping status
 public:
 
 	/**
@@ -70,7 +71,7 @@ public:
          *
 	 *   @return None
 	 */
-	CProfileInfo() : mpManifestStat(NULL),mpFragmentStat(NULL),mWidth(0),mHeight(0)
+	CProfileInfo() : mpManifestStat(NULL),mpFragmentStat(NULL),mWidth(0),mHeight(0),mCappedProfile(false)
 	{
 
 	}
@@ -179,13 +180,15 @@ public:
 	 *
 	 *   @param[in]  width of profile
 	 *   @param[in]  Height of profile
+	 *   @param[in]  Capped profile status
          *
 	 *   @return None
 	 */
-	void SetSize(int width, int height)
+	void SetSize(int width, int height, bool cappedProfile)
 	{
 		mWidth = width;
 		mHeight = height;
+		mCappedProfile = cappedProfile;
 	}
 
 	/**

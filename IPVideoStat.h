@@ -207,9 +207,10 @@ public:
 	 *   @param[in]  int width
 	 *   @param[in]  int height
 	 *   @param[in] audioIndex- Audio track index
+	 *   @param[in] cappedProfile
 	 *   @return None
 	 */
-	void SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex = 1);
+	void SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex = 1, bool cappedProfile = false);
 
 	/**
 	 *   @brief Sets Display frame size,

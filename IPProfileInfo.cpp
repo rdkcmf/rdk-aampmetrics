@@ -23,6 +23,8 @@
 #define TAG_FRAGMENT_STAT	"fs"	// Fragment Stats
 #define TAG_PROFILE_WDITH	"w"	// profile Width
 #define TAG_PROFILE_HEIGHT	"h"	// profile Height
+#define TAG_PROFILE_CAPPED      "pc"     // profile Capping
+
 
 /**
  *   @brief  Converts class object data to Json object
@@ -69,6 +71,9 @@ cJSON * CProfileInfo::ToJson() const
 					jsonObj =  cJSON_CreateNumber(mHeight);
 					cJSON_AddItemToObject(monitor, TAG_PROFILE_HEIGHT, jsonObj);
 			}
+
+			jsonObj =  cJSON_CreateNumber(mCappedProfile);
+			cJSON_AddItemToObject(monitor, TAG_PROFILE_CAPPED, jsonObj);
 		}
 
 		if(jsonObj == NULL)

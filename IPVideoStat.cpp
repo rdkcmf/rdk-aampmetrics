@@ -34,6 +34,7 @@
 #define TAG_TIME_PLAYBACK_DURATION			"d" 	// time for which playback was done, this is measured at the time of fragment download , hence play-back duration may be slightly less due to g-streamer and aamp buffers
 #define TAG_NET_DROP				"dn"   	// Step down profile count happened due to Bad network bandwidth
 #define TAG_ERR_DROP				"de"   	// Step down profile count happened due to Bad download errors/failures
+#define TAG_PROFILE_CAPPING                     "pc"     // profile filter status by display resolution
 #define TAG_DISPLAY_WIDTH				"w"   	// Display Width
 #define TAG_DISPLAY_HEIGHT				"h"   	// Display Height
 
@@ -60,7 +61,6 @@ const static std::map<VideoStatTrackType, std::string> StatTrackTypeStr = {
 	{STAT_AUDIO, TAG_AUDIO},
 	{STAT_UNKNOWN, TAG_UNKNOWN}
 };
-
 /**
  *   @brief Returns string of JSON object
  *
@@ -403,16 +403,18 @@ void CVideoStat::Increment_Data(VideoStatDataType dataType,VideoStatTrackType eT
  *   @param[in]  Profile or track type
  *   @param[in]  int width
  *   @param[in]  int height
+ *   @param[in]  int audio index
+ *   @param[in]  bool capped profile status
  *   @return None
  */
-void CVideoStat::SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex)
+void CVideoStat::SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex, bool cappedProfile)
 {
 	std::string strType = GetTrackTypeStr(eType, audioIndex);
 
 	if(eType != STAT_MAIN) // fragment stats are not applicable for main hls or dash manifest
 	{
 		CProfileInfo * pinfo = &(mMapStreamInfo[strType][bitrate]);
-		pinfo->SetSize(width,height);
+		pinfo->SetSize(width,height,cappedProfile);
 	}
 }
 
