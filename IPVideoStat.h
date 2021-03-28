@@ -48,7 +48,7 @@ private:
 	bool mbTsb;
 	int mDisplayWidth; // TV Display Width
 	int mDisplayHeight; // TV Display Height
-
+	bool mbProfileCapped; // Profile capping status
 	MapLicenceInfo mMapLicenseInfo;
 	MapStreamInfo mMapStreamInfo;
 	std::map<std::string ,std::string> mMapLang;
@@ -62,7 +62,7 @@ public:
 	 *   @return None
 	 */
 	CVideoStat() : mTmeToTopProfile(0), mTimeAtTopProfile(0),mTotalVideoDuration(0), mNetworkDropCount(COUNT_NONE), mErrorDropCount (COUNT_NONE),
-					mMapStreamInfo(),mMapLang(),mMapLicenseInfo(),mbTsb(false),mDisplayWidth(0),mDisplayHeight(0)
+					mMapStreamInfo(),mMapLang(),mMapLicenseInfo(),mbTsb(false),mDisplayWidth(0),mDisplayHeight(0),mbProfileCapped(false)
 	{
 
 	}
@@ -207,10 +207,9 @@ public:
 	 *   @param[in]  int width
 	 *   @param[in]  int height
 	 *   @param[in] audioIndex- Audio track index
-	 *   @param[in] cappedProfile
 	 *   @return None
 	 */
-	void SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex = 1, bool cappedProfile = false);
+	void SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex = 1);
 
 	/**
 	 *   @brief Sets Display frame size,
@@ -238,6 +237,13 @@ public:
 	 */
 	void SetTsbStatus(bool bEnable) { mbTsb = bEnable;}
 
+	/**
+	  *   @brief sets status of profile capping
+	  *
+	  *   @param[in]  mbProfileCapped = true means profile restriction applied
+	  *   @return None
+	  */
+        void SetProfileCappedStatus(bool bProfileCapped) { mbProfileCapped = bProfileCapped;}
 
 	/**
 	 *   @brief Returns string of JSON object

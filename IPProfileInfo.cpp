@@ -71,9 +71,6 @@ cJSON * CProfileInfo::ToJson() const
 					jsonObj =  cJSON_CreateNumber(mHeight);
 					cJSON_AddItemToObject(monitor, TAG_PROFILE_HEIGHT, jsonObj);
 			}
-
-			jsonObj =  cJSON_CreateNumber(mCappedProfile);
-			cJSON_AddItemToObject(monitor, TAG_PROFILE_CAPPED, jsonObj);
 		}
 
 		if(jsonObj == NULL)
