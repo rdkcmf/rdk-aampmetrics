@@ -46,6 +46,7 @@
 #define TAG_AD_AUDIO					"aa"	// Ad audio track
 #define TAG_AD_VIDEO					"av"	// Ad video track
 #define TAG_AUDIO					"a"	// Audio track 1
+#define TAG_SUBTITLE					"st"	// Subtitle track
 #define TAG_UNKNOWN					"u"	// unknown track
 
 #define TAG_SUPPORTED_LANG				"l"		// Supported language
@@ -59,6 +60,7 @@ const static std::map<VideoStatTrackType, std::string> StatTrackTypeStr = {
 	{STAT_AD_AUDIO, TAG_AD_AUDIO},
 	{STAT_AD_VIDEO, TAG_AD_VIDEO},
 	{STAT_AUDIO, TAG_AUDIO},
+	{STAT_SUBTITLE, TAG_SUBTITLE},
 	{STAT_UNKNOWN, TAG_UNKNOWN}
 };
 /**

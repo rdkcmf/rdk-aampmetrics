@@ -38,7 +38,8 @@ typedef enum E_VideoStatTrackType {
 	STAT_IFRAME,
 	STAT_AD_VIDEO,
 	STAT_AD_AUDIO,
-	STAT_AUDIO
+	STAT_AUDIO,
+	STAT_SUBTITLE
 } VideoStatTrackType;
 
 typedef enum E_VideoStatDataType{
