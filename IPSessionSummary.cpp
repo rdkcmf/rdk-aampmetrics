@@ -18,11 +18,9 @@
 */
 
 #include "IPSessionSummary.h"
+#include "StatsDefine.h"
 
-#define TAG_SESSION_SUMMARY		"f"  	// Latency report tag
-#define DEFAULT_START_VALUE 1
-
-
+size_t CSessionSummary::totalErrorCount = 0;
 /**
  *   @brief  Converts class object data to Json object
  *

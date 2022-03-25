@@ -18,24 +18,33 @@
 */
 
 #include "IPHTTPStatistics.h"
+#include "StatsDefine.h"
 
 /**
  *   @brief  Increment stat count
  *   @param[in]  download time
  *   @param[in]  HTTP/CURL response code
  *   @param[in] bool - connection status flag
+ *	 @param[in] manifestData - manifest details structure
  *   @return None
  */
-void CHTTPStatistics::IncrementCount(long downloadTimeMs, int responseCode, bool connectivity)
+void CHTTPStatistics::IncrementCount(long downloadTimeMs, int responseCode, bool connectivity, ManifestData * manifestData)
 {
 	if(responseCode != 200 && responseCode != 204 && responseCode != 206)
 	{
 		GetSessionSummary()->UpdateSummary(responseCode, connectivity);
+		CSessionSummary::totalErrorCount++;
 	}
 	else
 	{
 		GetLatencyReport()->RecordLatency(downloadTimeMs);
 		GetSessionSummary()->UpdateSummary(200, true);
+	}
+	
+	//update manifest details if present
+	if(manifestData)
+	{
+		GetManGenStatsInstance()->UpdateManifestData(manifestData);
 	}
 }
 
@@ -61,7 +70,7 @@ cJSON * CHTTPStatistics::ToJson() const
 			jsonObj = mLatencyReport->ToJson();
 			if(jsonObj)
 			{
-				cJSON_AddItemToObject(monitor, "l", jsonObj);
+				cJSON_AddItemToObject(monitor, TAG_LATENCY_REPORT, jsonObj);
 			}
 		}
 
@@ -70,7 +79,15 @@ cJSON * CHTTPStatistics::ToJson() const
 			jsonObj = mSessionSummary->ToJson();
 			if(jsonObj)
 			{
-				cJSON_AddItemToObject(monitor, "S", jsonObj);
+				cJSON_AddItemToObject(monitor, TAG_SESSION_SUMMARY, jsonObj);
+			}
+		}
+		if(g_ForPartnerApps && mManifestGenericStats)
+		{
+			jsonObj = mManifestGenericStats->ToJson();
+			if(jsonObj)
+			{
+				cJSON_AddItemToObject(monitor, TAG_MANIFEST_INFO, jsonObj);
 			}
 		}
 	}

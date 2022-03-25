@@ -18,10 +18,8 @@
 */
 
 #include "IPFragmentStatistics.h"
+#include "StatsDefine.h"
 
-#define TAG_URL				"u"	// URL of last failed download
-#define TAG_NORMAL_FRAGMENT_STAT	"n"	// Normal Fragment Stats
-#define TAG_NORMAL_INIT_FRAGMENT_STAT	"i"	// Init Fragment Stats ( used in case of DASH )
 /**
  *   @brief  Converts class object data to Json object
  *

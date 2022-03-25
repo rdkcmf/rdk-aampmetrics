@@ -21,48 +21,18 @@
  * @file VideoStat.cpp
  * @brief VideoStat data packing and storage
  */
+bool g_ForPartnerApps = false;
 
 #include "IPVideoStat.h"
 
 #include <iostream>
 #include <algorithm>
 
-#define TAG_VERSION					"vr" 	// version of video end event
-//timetoTop
-#define TAG_TIME_TO_TOP					"tt"  	// time to reach top profile
-#define TAG_TIME_AT_TOP					"ta" 	//time for which video remain on top profile
-#define TAG_TIME_PLAYBACK_DURATION			"d" 	// time for which playback was done, this is measured at the time of fragment download , hence play-back duration may be slightly less due to g-streamer and aamp buffers
-#define TAG_NET_DROP				"dn"   	// Step down profile count happened due to Bad network bandwidth
-#define TAG_ERR_DROP				"de"   	// Step down profile count happened due to Bad download errors/failures
-#define TAG_PROFILE_CAPPING                     	"pc"    // profile filter status by display resolution
-#define TAG_DISPLAY_WIDTH				"w"   	// Display Width
-#define TAG_DISPLAY_HEIGHT				"h"   	// Display Height
 
-#define TAG_TSB_AVAILIBLITY				"t"		// indicates if TSB used for playback,
-// TAGs for Playback types
-#define TAG_MAIN					"m"	// Main manifest
-#define TAG_VIDEO					"v"	// Video Profile
-#define TAG_IFRAME					"i"	// Iframe Profile
-#define TAG_AD_AUDIO					"aa"	// Ad audio track
-#define TAG_AD_VIDEO					"av"	// Ad video track
-#define TAG_AUDIO					"a"	// Audio track 1
-#define TAG_SUBTITLE					"st"	// Subtitle track
-#define TAG_UNKNOWN					"u"	// unknown track
+std::map<VideoStatTrackType, std::string> Track::StatTrackTypeStr;
 
-#define TAG_SUPPORTED_LANG				"l"		// Supported language
-#define TAG_PROFILES 					"p"		// Encapsulates Different Profile available in stream
-#define TAG_LICENSE_STAT				"ls"	// License statistics
 
-const static std::map<VideoStatTrackType, std::string> StatTrackTypeStr = {
-	{STAT_MAIN, TAG_MAIN},
-	{STAT_VIDEO, TAG_VIDEO},
-	{STAT_IFRAME, TAG_IFRAME},
-	{STAT_AD_AUDIO, TAG_AD_AUDIO},
-	{STAT_AD_VIDEO, TAG_AD_VIDEO},
-	{STAT_AUDIO, TAG_AUDIO},
-	{STAT_SUBTITLE, TAG_SUBTITLE},
-	{STAT_UNKNOWN, TAG_UNKNOWN}
-};
+
 /**
  *   @brief Returns string of JSON object
  *
@@ -70,8 +40,14 @@ const static std::map<VideoStatTrackType, std::string> StatTrackTypeStr = {
  *
  *   @return char * - Note that caller is responsible for deleting memory allocated for string
  */
-char * CVideoStat::ToJsonString(const char* additionalData) const
+char * CVideoStat::ToJsonString(const char* additionalData, bool forPA) const
 {
+	//update the g_ForPartnerApps global variable
+	g_ForPartnerApps = forPA;
+	
+	//Updated track names with respect to g_ForPartnerApps
+	Track::setTrackNames();
+	
 	char * strRet = NULL;
 	cJSON *monitor = cJSON_CreateObject();
 	if(monitor)
@@ -124,13 +100,40 @@ char * CVideoStat::ToJsonString(const char* additionalData) const
 			jsonObj =  cJSON_CreateNumber(mbProfileCapped);
 			cJSON_AddItemToObject(monitor, TAG_PROFILE_CAPPING, jsonObj);
 		}
+		//Applicable only for playback stats
+		if(g_ForPartnerApps)
+		{
+			cJSON * jsonObj = cJSON_CreateString(mMediaFormat.c_str());
+			if(jsonObj) cJSON_AddItemToObject(monitor, TAG_MEDIA_TYPE, jsonObj);
+			
+			
+			jsonObj = cJSON_CreateString(mPlaybackMode.c_str());
+			if(jsonObj) cJSON_AddItemToObject(monitor, TAG_PLAY_MODE, jsonObj);
+			
+			
+			if(mPlaybackMode == "LINEAR_TV" ||
+				mPlaybackMode == "IVOD" ||
+				mPlaybackMode == "SLE")
+			{
+				jsonObj = cJSON_CreateNumber(mLiveLatency);
+				if(jsonObj) cJSON_AddItemToObject(monitor, TAG_LIVE_LATENCY, jsonObj);
+			}
+			
+			jsonObj = cJSON_CreateNumber( CSessionSummary::totalErrorCount);
+			if(jsonObj) cJSON_AddItemToObject(monitor, TAG_TOTAL_ERROR, jsonObj);
+
+			if("DASH" == mMediaFormat)
+			{
+				jsonObj = cJSON_CreateNumber( ManifestGenericStats::totalGaps);
+				if(jsonObj) cJSON_AddItemToObject(monitor, TAG_NUM_GAPS,jsonObj);
+			}			
+		}
 		bool isDataAdded = false;
 
 		cJSON *langList = cJSON_CreateObject();
 		for (auto const& langItem : mMapLang)
 		{
-
-			std::string value = langItem.first;
+			std::string value =langItem.first.toString();
 			if(!value.empty() && !langItem.second.empty())
 			{
 				isDataAdded = true;
@@ -181,7 +184,7 @@ char * CVideoStat::ToJsonString(const char* additionalData) const
 					// iterate on stream info
 					while(child)
 					{
-						if(!strcmp(child->string, mapProfileInfo.first.c_str()))
+						if(!strcmp(child->string, mapProfileInfo.first.toString().c_str()))
 						{
 							// Found appropriate stream info
 							cJSON *childProfile = child->child;
@@ -224,7 +227,7 @@ char * CVideoStat::ToJsonString(const char* additionalData) const
 					cJSON_AddItemToObject(trackJson, TAG_LICENSE_STAT, licenceJson);
 				}
 
-				cJSON_AddItemToObject(monitor, mapProfileInfo.first.c_str(), trackJson);
+				cJSON_AddItemToObject(monitor, mapProfileInfo.first.toString().c_str(), trackJson);
 			}
 			else
 			{
@@ -239,7 +242,19 @@ char * CVideoStat::ToJsonString(const char* additionalData) const
 		{
 			jsonObj = cJSON_CreateString(VIDEO_END_DATA_VERSION);
 			cJSON_AddItemToObject(monitor, TAG_VERSION, jsonObj);
-
+			
+			if(g_ForPartnerApps)
+			{
+				time_t     now = time(0);
+				struct tm  tstruct;
+				char       buf[80];
+				tstruct = *gmtime(&now);
+				strftime(buf, sizeof(buf), "%Y-%m-%d.%X", &tstruct);
+				
+				jsonObj = cJSON_CreateString(buf);
+				cJSON_AddItemToObject(monitor, TAG_REPORT_TIME, jsonObj);
+			}
+			
 			if(mbTsb)
 			{
 				jsonObj =  cJSON_CreateNumber(1);
@@ -262,19 +277,19 @@ char * CVideoStat::ToJsonString(const char* additionalData) const
 /**
  *   @brief Increment Normal Fragment stats
  *
- *   @param[in] string - Indicates track for which Increment required
+ *   @param[in] Track track - Indicates track for which Increment required
  *   @param[in] bitrate : profile bitrate
  *   @param[in] download time - download time
  *   @param[in] response - HTTP/CURL response
  *	 @param[in] bool - connection status flag
  *   @return None
  */
-void CVideoStat::Increment_Fragment_Count(std::string eType, long bitrate, long downloadTimeMs, int response, bool connectivity)
+void CVideoStat::Increment_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity)
 {
-	if(eType != StatTrackTypeStr.at(STAT_MAIN)) // fragment stats are not applicable for main hls or dash manifest
+	if(track.type != STAT_MAIN) // fragment stats are not applicable for main hls or dash manifest
 	{
 		//MapProfileInfo mapProfileInfo = mMapStreamInfo[eType];
-		CProfileInfo * pinfo = &(mMapStreamInfo[eType][bitrate]);
+		CProfileInfo * pinfo = &(mMapStreamInfo[track][bitrate]);
 		pinfo->GetFragementStat()->GetNormalFragmentStat()->IncrementCount(downloadTimeMs, response, connectivity);
 	}
 }
@@ -282,18 +297,18 @@ void CVideoStat::Increment_Fragment_Count(std::string eType, long bitrate, long 
 /**
  *   @brief Increment Init Fragment stats ( used for dash case only )
  *
- *   @param[in] string - Indicates track for which Increment required
+ *   @param[in] Track track - Indicates track for which Increment required
  *   @param[in] bitrate : profile bitrate
  *   @param[in] download time - download time
  *   @param[in] response - HTTP/CURL response
  *	 @param[in] bool - connection status flag
  *   @return None
  */
-void CVideoStat::Increment_Init_Fragment_Count(std::string eType, long bitrate, long downloadTimeMs, int response, bool connectivity)
+void CVideoStat::Increment_Init_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity)
 {
-	if(eType != StatTrackTypeStr.at(STAT_MAIN)) // fragment stats are not applicable for main hls or dash manifest
+	if(track.type != STAT_MAIN) // fragment stats are not applicable for main hls or dash manifest
 	{
-		CProfileInfo * pinfo = &(mMapStreamInfo[eType][bitrate]);
+		CProfileInfo * pinfo = &(mMapStreamInfo[track][bitrate]);
 		pinfo->GetFragementStat()->GetInitFragmentStat()->IncrementCount(downloadTimeMs, response, connectivity);
 	}
 }
@@ -301,19 +316,20 @@ void CVideoStat::Increment_Init_Fragment_Count(std::string eType, long bitrate, 
 /**
  *   @brief Increment Manifest stats
  *
- *   @param[in] string - Indicates track for which Increment required
+ *   @param[in] Track track - Indicates track for which Increment required
  *   @param[in] bitrate : profile bitrate
  *   @param[in] bitrate : profile bitrate ( 0 means Main HLS Mainifest or DASH manifest )
  *   @param[in] download time - download time
  *   @param[in] response - HTTP/CURL response
  *   @param[in] bool - connection status flag
+ * 	 @param[in] manifestData - manifest details structure
  *
  *   @return None
  */
-void CVideoStat::Increment_Manifest_Count(std::string eType, long bitrate, long downloadTimeMs, int response, bool connectivity)
+void CVideoStat::Increment_Manifest_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity, ManifestData * manifestData)
 {
-	CProfileInfo * pinfo = &(mMapStreamInfo[eType][bitrate]);
-	pinfo->GetManifestStat()->IncrementCount(downloadTimeMs, response, connectivity);
+	CProfileInfo * pinfo = &(mMapStreamInfo[track][bitrate]);
+	pinfo->GetManifestStat()->IncrementCount(downloadTimeMs, response, connectivity, manifestData);
 }
 
 
@@ -327,8 +343,7 @@ void CVideoStat::Increment_Manifest_Count(std::string eType, long bitrate, long 
  */
 void CVideoStat::Record_License_EncryptionStat(VideoStatTrackType eType, bool isEncypted, bool isKeyChanged, int audioIndex)
 {
-	std::string strType = GetTrackTypeStr(eType, audioIndex);
-	mMapLicenseInfo[strType].Record_License_EncryptionStat(isEncypted,isKeyChanged);
+	mMapLicenseInfo[std::move(Track(eType, audioIndex))].Record_License_EncryptionStat(isEncypted,isKeyChanged);
 }
 
 /**
@@ -340,10 +355,9 @@ void CVideoStat::Record_License_EncryptionStat(VideoStatTrackType eType, bool is
  */
 void CVideoStat::SetFailedFragmentUrl(VideoStatTrackType eType, long bitrate, std::string url, int audioIndex)
 {
-	std::string strType = GetTrackTypeStr(eType, audioIndex);
 	if(eType != STAT_MAIN) // fragment stats are not applicable for main hls or dash manifest
 	{
-		CProfileInfo * pinfo = &(mMapStreamInfo[strType][bitrate]);
+		CProfileInfo * pinfo = &(mMapStreamInfo[std::move(Track(eType,audioIndex))][bitrate]);
 		pinfo->GetFragementStat()->SetUrl(url);
 	}
 }
@@ -359,10 +373,9 @@ void CVideoStat::SetFailedFragmentUrl(VideoStatTrackType eType, long bitrate, st
  */
 void CVideoStat::Setlanguage(VideoStatTrackType eType, std::string strLang, int audioIndex)
 {
-	std::string strType = GetTrackTypeStr(eType, audioIndex);
 	if(eType == VideoStatTrackType::STAT_AUDIO)
 	{
-		this->mMapLang[strType] = strLang;
+		this->mMapLang[std::move(Track(eType,audioIndex))] = strLang;
 	}
 }
 
@@ -377,27 +390,26 @@ void CVideoStat::Setlanguage(VideoStatTrackType eType, std::string strLang, int 
  *   @param[in] response - HTTP/CURL response
  *   @param[in] bool - connection status flag
  *   @param[in] audioIndex - Audio track index
- *
+ * 	 @param[in] manifestData - manifest details structure
  *   @return None
  */
-void CVideoStat::Increment_Data(VideoStatDataType dataType,VideoStatTrackType eType, long bitrate , long downloadTimeMs, int response, bool connectivity, int audioIndex)
+void CVideoStat::Increment_Data(VideoStatDataType dataType,VideoStatTrackType eType, long bitrate , long downloadTimeMs, int response, bool connectivity, int audioIndex, ManifestData * manifestData)
 {
-	std::string strType = GetTrackTypeStr(eType, audioIndex);
 	switch(dataType)
 	{
 		case VE_DATA_MANIFEST:
 			{
-				Increment_Manifest_Count(strType,bitrate,downloadTimeMs,response,connectivity);
+				Increment_Manifest_Count(std::move(Track(eType, audioIndex)),bitrate,downloadTimeMs,response,connectivity, manifestData);
 			}
 			break;
 		case VE_DATA_FRAGMENT:
 			{
-				Increment_Fragment_Count(strType,bitrate,downloadTimeMs,response,connectivity);
+				Increment_Fragment_Count(std::move(Track(eType, audioIndex)),bitrate,downloadTimeMs,response,connectivity);
 			}
 			break;
 		case VE_DATA_INIT_FRAGMENT:
 			{
-				Increment_Init_Fragment_Count(strType,bitrate,downloadTimeMs,response,connectivity);
+				Increment_Init_Fragment_Count(std::move(Track(eType, audioIndex)),bitrate,downloadTimeMs,response,connectivity);
 			}
 			break;
 		default:
@@ -416,11 +428,9 @@ void CVideoStat::Increment_Data(VideoStatDataType dataType,VideoStatTrackType eT
  */
 void CVideoStat::SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex)
 {
-	std::string strType = GetTrackTypeStr(eType, audioIndex);
-
 	if(eType != STAT_MAIN) // fragment stats are not applicable for main hls or dash manifest
 	{
-		CProfileInfo * pinfo = &(mMapStreamInfo[strType][bitrate]);
+		CProfileInfo * pinfo = &(mMapStreamInfo[std::move(Track(eType,audioIndex))][bitrate]);
 		pinfo->SetSize(width,height);
 	}
 }
@@ -438,22 +448,15 @@ void CVideoStat::SetDisplayResolution(int width, int height)
 	mDisplayHeight = height;
 }
 
+
 /**
-*   @brief Converts Tracktype enum to string
+*   @brief increment gaps count between periods
 *
-*   @param[in]  VideoStatTrackType - track type
-*   @param[in]  int - Audio track index
+*   @param[in]  None
 *
-*   @return std::string - track type in string format
+*   @return None
 */
-std::string CVideoStat::GetTrackTypeStr(VideoStatTrackType type, int audioIndex)
+void CVideoStat::IncrementGaps()
 {
-	if(type == STAT_AUDIO)
-	{
-		return (StatTrackTypeStr.at(type) + std::to_string(audioIndex));
-	}
-	else
-	{
-		return StatTrackTypeStr.at(type);
-	}
+	ManifestGenericStats::totalGaps++;
 }

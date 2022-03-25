@@ -18,10 +18,8 @@
 */
 
 #include "IPLicnsStatistics.h"
+#include "StatsDefine.h"
 
-#define TAG_TOTAL_ROTATIONS			"r"  	// Total License rotation or stream switches
-#define TAG_TOTAL_ENCRYPTED_TO_CLEAR		"e"		// Total Encrypted to Clear Switch
-#define TAG_TOTAL_CLEAR_TO_ENCRYPTED		"c"		// Total Clear  to Encrypted Switch
 
 
 /**

@@ -22,6 +22,7 @@
 
 #include "IPLatencyReport.h"
 #include "IPSessionSummary.h"
+#include "ManifestGenericStats.h"
 
 #define COUNT_NONE	0
 #define VIDEO_END_DATA_VERSION		"2.0"
@@ -45,8 +46,9 @@ class CHTTPStatistics
 protected:
 	CSessionSummary* mSessionSummary;
 	CLatencyReport* mLatencyReport;
+	ManifestGenericStats* mManifestGenericStats;
 public:
-	CHTTPStatistics() : mSessionSummary(NULL), mLatencyReport(NULL)
+	CHTTPStatistics() : mSessionSummary(NULL), mLatencyReport(NULL), mManifestGenericStats(NULL)
 	{
 
 	}
@@ -63,6 +65,11 @@ public:
 			delete mLatencyReport;
 			mLatencyReport = NULL;
 		}
+		if(mManifestGenericStats)
+		{
+			delete mManifestGenericStats;
+			mManifestGenericStats = NULL;
+		}
 	}
 
 	CHTTPStatistics(const CHTTPStatistics& newObj): CHTTPStatistics()
@@ -74,6 +81,10 @@ public:
 		if(newObj.mLatencyReport)
 		{
 			mLatencyReport = new CLatencyReport(*newObj.mLatencyReport);
+		}
+		if(newObj.mManifestGenericStats)
+		{
+			mManifestGenericStats = new ManifestGenericStats(*newObj.mManifestGenericStats);
 		}
 	}
 
@@ -101,6 +112,19 @@ public:
 			{
 				delete mLatencyReport;
 				mLatencyReport = NULL;
+			}
+		}
+		
+		if(newObj.mManifestGenericStats)
+		{
+			mManifestGenericStats = new ManifestGenericStats(*newObj.mManifestGenericStats);
+		}
+		else
+		{
+			if(mManifestGenericStats)
+			{
+				delete mManifestGenericStats;
+				mManifestGenericStats = NULL;
 			}
 		}
 		return *this;
@@ -135,15 +159,29 @@ public:
 	}
 
 	/**
+	 *   @brief Returns ManifestGenericStats instance  and allocates if not allocated.
+	 *   @param[in]  NONE
+	 *   @return ManifestGenericStats pointer
+	 */
+	ManifestGenericStats * GetManGenStatsInstance()
+	{
+		if(!mManifestGenericStats)
+		{
+			mManifestGenericStats = new ManifestGenericStats();
+		}
+		return mManifestGenericStats;
+	}
+	
+	/**
 	 *   @brief  Increment stat count
 	 *
 	 *   @param[in]  download time
 	 *   @param[in]  HTTP/CURL response code
 	 * 	 @param[in] bool - connection status flag
-	 *
+	 *	@param[in] manifestData - connection status flag
 	 *   @return None
 	 */
-	void IncrementCount(long downloadTimeMs, int responseCode, bool connectivity);
+	void IncrementCount(long downloadTimeMs, int responseCode, bool connectivity, ManifestData * manifestData = nullptr);
 
 	/**
 	 *   @brief  Converts class object data to Json object

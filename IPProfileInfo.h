@@ -26,29 +26,6 @@
 #include "IPFragmentStatistics.h"
 #include "IPLicnsStatistics.h"
 
-/*
- *  Stores Track types, With respect to Video Stat
- *  Main Manifest download is also considared as seperate track as Stats are same.
- *  Max of 5 Audio tracks data collection supported and seperate IFRAME stats are collected in single track type STAT_IFRAME
- */
-typedef enum E_VideoStatTrackType {
-	STAT_UNKNOWN,
-	STAT_MAIN, // HLS Main manifest or DASH Manifest
-	STAT_VIDEO,
-	STAT_IFRAME,
-	STAT_AD_VIDEO,
-	STAT_AD_AUDIO,
-	STAT_AUDIO,
-	STAT_SUBTITLE
-} VideoStatTrackType;
-
-typedef enum E_VideoStatDataType{
-	VE_DATA_UNKNOWN,
-	VE_DATA_MANIFEST,
-	VE_DATA_FRAGMENT,
-	VE_DATA_INIT_FRAGMENT,
-	VE_DATA_LICENSE
-} VideoStatDataType;
 
 /*
  *  Profile is consist of Manifest , Fragment and License stat,
