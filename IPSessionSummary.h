@@ -37,7 +37,8 @@ public:
 	CSessionSummary() : isInitialized(false), mSessionSummaryMap()
 	{
 	}
-
+	//Keeps track of all the error counts across profiles
+	static size_t totalErrorCount;
 	/**
 	 *   @brief  Increments summary stat count
 	 *   @param[in]  HTTP/CURL response

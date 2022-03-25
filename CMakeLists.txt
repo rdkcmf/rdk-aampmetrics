@@ -28,7 +28,8 @@ set(LIB_SOURCES IPHTTPStatistics.cpp
 	    IPVideoStat.cpp
 	    IPProfileInfo.cpp
 	    IPSessionSummary.cpp
-	    IPLatencyReport.cpp)
+	    IPLatencyReport.cpp
+	    ManifestGenericStats.cpp)
 
 add_library(metrics SHARED ${LIB_SOURCES})
 
@@ -50,4 +51,4 @@ target_link_libraries(metrics "-lcjson")
 
 set_target_properties(metrics PROPERTIES PUBLIC_HEADER "IPVideoStat.h")
 install(TARGETS metrics DESTINATION lib PUBLIC_HEADER DESTINATION include)
-install(FILES IPHTTPStatistics.h IPFragmentStatistics.h IPLicnsStatistics.h IPProfileInfo.h IPSessionSummary.h IPLatencyReport.h DESTINATION include)
+install(FILES IPHTTPStatistics.h IPFragmentStatistics.h IPLicnsStatistics.h IPProfileInfo.h IPSessionSummary.h IPLatencyReport.h StatsDefine.h ManifestGenericStats.h DESTINATION include)

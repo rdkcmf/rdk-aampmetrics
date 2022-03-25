@@ -18,11 +18,8 @@
 */
 
 #include "IPLatencyReport.h"
+#include "StatsDefine.h"
 
-#define TAG_LATENCY_REPORT		"l"  	// Latency report tag
-#define TAG_TIME_WINDOW_PREFIX		"T"	// Time window prefix
-#define DEFAULT_START_VALUE 1
-#define LATENCY_WINDOW_BUCKET_DURATION 250
 
 
 /**
@@ -45,7 +42,7 @@ cJSON * CLatencyReport::ToJson() const
 			for(auto it : mLatencyReportMap)
 			{
 				jsonObj =  cJSON_CreateNumber(it.second);
-				cJSON_AddItemToObject(monitor, it.first.c_str(), jsonObj);
+				cJSON_AddItemToObject(monitor, (TAG_TIME_WINDOW_PREFIX + it.first).c_str(), jsonObj);
 			}
 
 			if(jsonObj == NULL)
@@ -87,7 +84,7 @@ std::string CLatencyReport::GetTimeWindow(long timeMs)
 	if(isInitialized)
 	{
 		unsigned int windowNumber = (timeMs / LATENCY_WINDOW_BUCKET_DURATION);
-		window = TAG_TIME_WINDOW_PREFIX + std::to_string(windowNumber);
+		window = std::to_string(windowNumber);
 	}
 	return window;
 }

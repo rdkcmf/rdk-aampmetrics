@@ -18,12 +18,7 @@
 */
 
 #include "IPProfileInfo.h"
-
-#define TAG_MANIFEST_STAT	"ms"	// Manifest Stats
-#define TAG_FRAGMENT_STAT	"fs"	// Fragment Stats
-#define TAG_PROFILE_WDITH	"w"	// profile Width
-#define TAG_PROFILE_HEIGHT	"h"	// profile Height
-#define TAG_PROFILE_CAPPED      "pc"     // profile Capping
+#include "StatsDefine.h"
 
 
 /**

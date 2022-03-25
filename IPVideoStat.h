@@ -26,14 +26,15 @@
 #define __VIDEO_STAT_H__
 
 #include "IPProfileInfo.h"
-
+#include "ManifestGenericStats.h"
+#include "StatsDefine.h"
 // Map of profile bitrate(Bits per sec) and CProfileInfo
 // 0 is reserved for Main HLS manifest or DASH manifest
 typedef std::map<long, CProfileInfo> MapProfileInfo;
+typedef std::map<Track, MapProfileInfo>  MapStreamInfo; // collection of all Audip/Video/Profile info
+typedef std::map<Track, CLicenseStatistics>  MapLicenceInfo; // Licence stats for each track
+typedef std::map<Track, CFragmentStatistics> MapAdStreamInfo; //collection of ad audio/video fragments statistics
 
-typedef std::map<std::string, MapProfileInfo>  MapStreamInfo; // collection of all Audip/Video/Profile info
-typedef std::map<std::string, CLicenseStatistics>  MapLicenceInfo; // Licence stats for each track
-typedef std::map<std::string, CFragmentStatistics> MapAdStreamInfo; //collection of ad audio/video fragments statistics
 
 class CVideoStat
 {
@@ -51,20 +52,25 @@ private:
 	bool mbProfileCapped; // Profile capping status
 	MapLicenceInfo mMapLicenseInfo;
 	MapStreamInfo mMapStreamInfo;
-	std::map<std::string ,std::string> mMapLang;
+	std::map<Track ,std::string> mMapLang;
+	std::string mMediaFormat;
+	long mLiveLatency;
+	std::string mPlaybackMode;
+
 public:
 
 	/**
 	 *   @brief Default constructor
 	 *
-	 *   @param[in]  NONE
+	 *   @param[in]  mediaFormat - format of the current playback
          *
 	 *   @return None
 	 */
-	CVideoStat() : mTmeToTopProfile(0), mTimeAtTopProfile(0),mTotalVideoDuration(0), mNetworkDropCount(COUNT_NONE), mErrorDropCount (COUNT_NONE),
-					mMapStreamInfo(),mMapLang(),mMapLicenseInfo(),mbTsb(false),mDisplayWidth(0),mDisplayHeight(0),mbProfileCapped(false)
+	CVideoStat(std::string mediaFormat = "") : mMediaFormat(mediaFormat), mTmeToTopProfile(0), mTimeAtTopProfile(0),mTotalVideoDuration(0), mNetworkDropCount(COUNT_NONE), mErrorDropCount (COUNT_NONE),
+					mMapStreamInfo(),mMapLang(),mMapLicenseInfo(),mbTsb(false),mDisplayWidth(0),mDisplayHeight(0),mbProfileCapped(false), mLiveLatency(0),mPlaybackMode("NOT SET")
 	{
-
+		ManifestGenericStats::totalGaps = 0;
+		CSessionSummary::totalErrorCount = 0;
 	}
 
 	/**
@@ -78,7 +84,36 @@ public:
 	{
 
 	}
+	
+	/**
+	 *   @brief Sets time latency for live playback
+	 *
+	 *   @param[in]  long long latency
+         *
+	 *   @return None
+	 */
+	void setLiveLatency (long latency) { mLiveLatency = latency; }
+	
+	/**
+	 *   @brief Sets playback mode (live/vod etc)
+	 *
+	 *   @param[in]  string playbackmode
+         *
+	 *   @return None
+	 */
+	void setPlaybackMode (std::string playbackMode)
+	{
+		mPlaybackMode = playbackMode;
+	}
 
+	/**
+	 *   @brief increment gaps count between periods
+	 *
+	 *   @param[in]  string playbackmode
+         *
+	 *   @return None
+	 */
+	void IncrementGaps();
 	/**
 	 *   @brief Sets time to top Profile Time stat
 	 *
@@ -130,19 +165,19 @@ public:
 	/**
 	 *   @brief Increment Normal Fragment stats
 	 *
-	 *    @param[in] std::string - Indicates track for which Increment required
+	 *    @param[in] Track track - Indicates track for which Increment required
 	 *    @param[in]bitrate : profile bitrate
 	 *    @param[in] download time - download time
 	 *    @param[in] response - HTTP/CURL response
 	 *    @param[in] bool - connection status flag
 	 *   @return None
 	 */
-	void Increment_Fragment_Count(std::string eType, long bitrate, long downloadTimeMs, int response, bool connectivity);
+	void Increment_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity);
 
 	/**
 	 *   @brief Increment Init Fragment stats ( used for dash case only )
 	 *
-	 *    @param[in] std::string - Indicates track for which Increment required
+	 *    @param[in] Track track - Indicates track for which Increment required
 	 *    @param[in] bitrate : profile bitrate
 	 *    @param[in] download time - download time
 	 *    @param[in] response - HTTP/CURL response
@@ -150,12 +185,12 @@ public:
 	 *
 	 *   @return None
 	 */
-	void Increment_Init_Fragment_Count(std::string eType, long bitrate, long downloadTimeMs, int response, bool connectivity);
+	void Increment_Init_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity);
 
 	/**
 	 *   @brief Increment Manifest stats
 	 *
-	 *    @param[in] std::string - Indicates track for which Increment required
+	 *    @param[in] Track track - Indicates track for which Increment required
 	 *    @param[in] bitrate : profile bitrate ( 0 means Main HLS Mainifest or DASH manifest )
 	 *    @param[in] download time - download time
 	 *    @param[in] response - HTTP/CURL response
@@ -163,7 +198,7 @@ public:
 	 *
 	 *   @return None
 	 */
-	void Increment_Manifest_Count(std::string eType, long bitrate, long downloadTimeMs, int response, bool connectivity);
+	void Increment_Manifest_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity, ManifestData * manifestData = NULL);
 
 	/**
 	 *   @brief   Records License stat based on isEncypted
@@ -185,10 +220,10 @@ public:
 	 *   @param[in] response - HTTP/CURL response
 	 *   @param[in] bool - connection status flag
 	 *   @param[in] audioIndex- Audio track index
-	 *
+	 * 	 @param[in] manifestData - manifest details structure
 	 *   @return None
 	 */
-	void Increment_Data(VideoStatDataType dataType,VideoStatTrackType eType, long bitrate, long downloadTimeMs, int response, bool connectivity, int audioIndex = 1);
+	void Increment_Data(VideoStatDataType dataType,VideoStatTrackType eType, long bitrate, long downloadTimeMs, int response, bool connectivity, int audioIndex = 1, ManifestData * manifestData = nullptr);
 
 	/**
 	 *   @brief Sets URL for failed download fragments
@@ -252,17 +287,6 @@ public:
 	 *
 	 *   @return char * - Note that caller is responsible for deleting memory allocated for string
 	 */
-	char * ToJsonString(const char* additionalData = nullptr) const;
-
-
-	/**
-	 *   @brief Converts Tracktype enum to string
-	 *
-	 *   @param[in]  VideoStatTrackType - track type
-	 *   @param[in]  int - Audio track index
-	 *
-	 *   @return std::string - track type in string format
-	 */
-	std::string GetTrackTypeStr(VideoStatTrackType type, int audioIndex);
+	char * ToJsonString(const char* additionalData = nullptr, bool forPA = false) const;
 };
 #endif /* __VIDEO_STAT_H__ */
