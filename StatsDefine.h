@@ -104,7 +104,7 @@ struct Track
 	//Just to assist in storing Track in std::maps
 	bool operator < (Track t) const
 	{
-		return type < t.type;
+		return (type < t.type || number < t.number);
 	}
 	int number;
 	static std::map<VideoStatTrackType, std::string> StatTrackTypeStr;
