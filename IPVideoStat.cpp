@@ -111,7 +111,9 @@ char * CVideoStat::ToJsonString(const char* additionalData, bool forPA) const
 			if(jsonObj) cJSON_AddItemToObject(monitor, TAG_PLAY_MODE, jsonObj);
 			
 			
-			if(mPlaybackMode == "LINEAR_TV")
+			if(mPlaybackMode == "LINEAR_TV" ||
+				mPlaybackMode == "IVOD" ||
+				mPlaybackMode == "SLE")
 			{
 				jsonObj = cJSON_CreateNumber(mLiveLatency);
 				if(jsonObj) cJSON_AddItemToObject(monitor, TAG_LIVE_LATENCY, jsonObj);
