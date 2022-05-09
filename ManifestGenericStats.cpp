@@ -17,17 +17,17 @@
  * limitations under the License.
  */
 
+/**
+ * @file ManifestGenericStats.cpp
+ * @brief File handles Stats on manifest files
+ */
+
+
 #include "ManifestGenericStats.h"
 
 size_t ManifestGenericStats::totalGaps = 0;
 
-/**
- *   @brief Updated mManifestData
- * 
- * 	 @param[in] manifestData - manifest details structure
- *
- *   @return None
- */
+
 void ManifestGenericStats::UpdateManifestData(ManifestData *manifestData)
 {
 	// Initialize data
@@ -46,11 +46,7 @@ void ManifestGenericStats::UpdateManifestData(ManifestData *manifestData)
 	}
 }
 
-/**
- *   @brief Convert to json
- *
- *   @return None
- */
+
 cJSON * ManifestGenericStats::ToJson() const
 {
 	cJSON * jsonObj = cJSON_CreateObject();

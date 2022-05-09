@@ -20,9 +20,18 @@
 #ifndef __FRAGMENT_STATISTICS_H__
 #define __FRAGMENT_STATISTICS_H__
 
+/**
+ * @file IPFragmentStatistics.cpp
+ * @brief This file have the stats of IP fragments
+ */
+
+
 #include "IPHTTPStatistics.h"
 
-
+/**
+ * @class CFragmentStatistics
+ * @brief Class contains statistics of IP fragments
+ */
 class CFragmentStatistics
 {
 private:
@@ -96,8 +105,6 @@ public:
 	/**
 	 *   @brief  gets Init Fragment stats object, Creates if not created
 	 *
-	 *   @param[in]  None
-     *
 	 *   @return None
 	 */
 	CHTTPStatistics * GetInitFragmentStat()
@@ -112,8 +119,6 @@ public:
 	/**
 	 *   @brief  gets Normal Fragment stats object, Creates if not created
 	 *
-	 *   @param[in]  None
-     *
 	 *   @return None
 	 */
 	CHTTPStatistics * GetNormalFragmentStat()
@@ -128,8 +133,6 @@ public:
 	/**
 	 *   @brief  Default Destructor
 	 *
-	 *   @param[in]  None
-     *
 	 *   @return None
 	 */
 	~CFragmentStatistics()
@@ -148,7 +151,7 @@ public:
 	/**
 	 *   @brief  Sets the Url
 	 *
-	 *   @param[in]  std::string url to be set
+	 *   @param[in] url std::string url to be set
 	 *
 	 *   @return None
 	 */
@@ -160,8 +163,6 @@ public:
 	/**
 	 *   @brief  Converts class object data to Json object
 	 *
-	 *   @param[in]  NONE
-     *
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;

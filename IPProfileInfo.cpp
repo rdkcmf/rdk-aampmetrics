@@ -15,19 +15,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
+
+/**
+ * @file CProfileInfo.cpp
+ * @brief This file Manage the stat of Manifest , Fragment and License
+ */
+
 
 #include "IPProfileInfo.h"
 #include "StatsDefine.h"
 
 
-/**
- *   @brief  Converts class object data to Json object
- *
- *   @param[in]  NONE
- *
- *   @return cJSON pointer
- */
 cJSON * CProfileInfo::ToJson() const
 {
 	cJSON *monitor = cJSON_CreateObject();

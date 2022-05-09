@@ -15,19 +15,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
-*/
+ */
+
+/**
+ * @file IPHTTPStatistics.cpp
+ * @brief This file handles the opertions to manage the HTTP statistics for all video types
+ */
 
 #include "IPHTTPStatistics.h"
 #include "StatsDefine.h"
 
-/**
- *   @brief  Increment stat count
- *   @param[in]  download time
- *   @param[in]  HTTP/CURL response code
- *   @param[in] bool - connection status flag
- *	 @param[in] manifestData - manifest details structure
- *   @return None
- */
+
 void CHTTPStatistics::IncrementCount(long downloadTimeMs, int responseCode, bool connectivity, ManifestData * manifestData)
 {
 	if(responseCode != 200 && responseCode != 204 && responseCode != 206)
@@ -49,13 +47,6 @@ void CHTTPStatistics::IncrementCount(long downloadTimeMs, int responseCode, bool
 }
 
 
-/**
- *   @brief  Converts class object data to Json object
- *
- *   @param[in]  NONE
- *
- *   @return cJSON pointer
- */
 cJSON * CHTTPStatistics::ToJson() const
 {
 

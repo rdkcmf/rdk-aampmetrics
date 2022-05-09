@@ -17,6 +17,11 @@
  * limitations under the License.
  */
 
+/**
+ * @file ManifestGenericStats.h
+ * @brief File handles Stats on manifest files
+ */
+
 #ifndef __MANIFEST_GEN_STATS_H__
 #define __MANIFEST_GEN_STATS_H__
 
@@ -25,10 +30,15 @@
 #include <string>
 #include <cjson/cJSON.h>
 
-//Map to fill the manifest info json 
-typedef std::map<std::string,double>  MapManifestData;
+typedef std::map<std::string,double>  MapManifestData; /**< Map to fill the manifest info json */
 
-//struct to keep track of manifest details
+/**
+ *
+ * @struct ManifestData
+ * @brief struct to keep track of manifest details
+ *
+ */
+
 struct ManifestData
 {
 	long mDownloadTimeMs;
@@ -45,6 +55,12 @@ struct ManifestData
 	}
 };
 
+/**
+ *
+ * @class ManifestGenericStats
+ * @brief Stats on manifest files
+ *
+ */
 
 class ManifestGenericStats
 {
@@ -56,7 +72,6 @@ public:
 
 	/**
 	 *   @brief  constructor
-	 *   @param[in]  NONE
 	 *   @return  None
 	 */
 	ManifestGenericStats() : isInitialized(false), mManifestData()
@@ -65,14 +80,12 @@ public:
 
 	/**
 	 *   @brief  updates manifest details
-	 *   @param[in]  NONE
 	 *   @return  None
 	 */
 	void UpdateManifestData(ManifestData *manifestData);
 	
 	/**
 	 *   @brief  Converts class object data to Json object
-	 *   @param[in]  NONE
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;
