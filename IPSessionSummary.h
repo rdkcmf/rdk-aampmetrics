@@ -15,12 +15,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-/**
- * @file IPSessionSummary.h
- * @brief This file handles information on session summary report
- */
+*/
 
 #include <stdio.h>
 #include <map>
@@ -31,12 +26,7 @@
 #ifndef __SESSION_SUMMARY_H__
 #define __SESSION_SUMMARY_H__
 
-typedef std::map<std::string, unsigned int>  MapSessionSummary; /**< Session summary stats for each profile */
-
-/**
- * @class CSessionSummary
- * @brief Holds the information about session summary report
- */
+typedef std::map<std::string, unsigned int>  MapSessionSummary; // Session summary stats for each profile
 
 class CSessionSummary
 {
@@ -47,24 +37,26 @@ public:
 	CSessionSummary() : isInitialized(false), mSessionSummaryMap()
 	{
 	}
-	static size_t totalErrorCount;		/**< Keeps track of all the error counts across profiles */
+	//Keeps track of all the error counts across profiles
+	static size_t totalErrorCount;
 	/**
 	 *   @brief  Increments summary stat count
-	 *   @param[in] response HTTP/CURL response
+	 *   @param[in]  HTTP/CURL response
 	 *   @return None
 	 */
 	void IncrementCount(std::string response);
 
 	/**
 	 *   @brief  Converts class object data to Json object
+	 *   @param[in]  NONE
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;
 
 	/**
 	 *   @brief Update session summary report
-	 *   @param[in] response - http/curl response
-	 *   @param[in] connectivity - connection status flag
+	 *   @param[in]  int http/curl response
+	 *	 @param[in] bool - connection status flag
 	 *   @return NONE.
 	 */
 	void UpdateSummary(int response, bool connectivity);

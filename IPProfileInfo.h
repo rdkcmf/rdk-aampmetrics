@@ -17,10 +17,7 @@
  * limitations under the License.
 */
 
-/**
- * @file CProfileInfo.h
- * @brief This file Manage the stat of Manifest , Fragment and License
- */
+
 
 
 #ifndef __PROFILEINFO_H__
@@ -30,24 +27,25 @@
 #include "IPLicnsStatistics.h"
 
 
-/**
- * @class CProfileInfo
- * @brief Profile is consist of Manifest , Fragment and License stat,
- *  	  Here there are two types of fragments Init and Normal and last failed URL is stored
- *  	  for only fragments hence separate class is created for fragment CFragmentStatistics
+/*
+ *  Profile is consist of Manifest , Fragment and License stat,
+ *  Here there are two types of fragments Init and Normal and last failed URL is stored
+ *  for only fragments hence separate class is created for fragment CFragmentStatistics
  */
 class CProfileInfo
 {
 private:
 	CHTTPStatistics * mpManifestStat;
 	CFragmentStatistics * mpFragmentStat;
-	int mWidth; 	/**< Frame width */
-	int mHeight; 	/**< Frame height */
+	int mWidth; // Frame width
+	int mHeight; // Frame height
 public:
 
 	/**
 	 *   @brief Default constructor
 	 *
+	 *   @param[in]  NONE
+         *
 	 *   @return None
 	 */
 	CProfileInfo() : mpManifestStat(NULL),mpFragmentStat(NULL),mWidth(0),mHeight(0)
@@ -106,6 +104,8 @@ public:
 	/**
 	 *   @brief Default Destructor
 	 *
+	 *   @param[in]  NONE
+         *
 	 *   @return None
 	 */
 	~CProfileInfo()
@@ -123,6 +123,8 @@ public:
 	/**
 	 *   @brief Returns Manifest stat and allocates if not allocated.
 	 *
+	 *   @param[in]  NONE
+         *
 	 *   @return CHTTPStatistics pointer
 	 */
 	CHTTPStatistics * GetManifestStat()
@@ -137,6 +139,8 @@ public:
 	/**
 	 *   @brief Returns Fragment stat and allocates if not allocated.
 	 *
+	 *   @param[in]  NONE
+         *
 	 *   @return CFragmentStatistics pointer
 	 */
 	CFragmentStatistics * GetFragementStat()
@@ -151,8 +155,8 @@ public:
 	/**
 	 *   @brief Sets the profile frame size
 	 *
-	 *   @param[in] width - width of profile
-	 *   @param[in] height - Height of profile
+	 *   @param[in]  width of profile
+	 *   @param[in]  Height of profile
          *
 	 *   @return None
 	 */
@@ -165,6 +169,8 @@ public:
 	/**
 	 *   @brief  Converts class object data to Json object
 	 *
+	 *   @param[in]  NONE
+     *
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;

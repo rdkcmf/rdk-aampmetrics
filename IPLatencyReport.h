@@ -17,11 +17,6 @@
  * limitations under the License.
 */
 
-/**
- * @file IPLatencyReport.h
- * @brief This file holds information about Latency report
- */
-
 #include <stdio.h>
 #include <map>
 #include <string>
@@ -33,11 +28,6 @@
 
 
 typedef std::map<std::string, unsigned int>  MapLatencyReport; // Latency Report stats for each profile
-
-/**
- * @class CLatencyReport
- * @brief class to hold information about Latency report
- */
 
 class CLatencyReport
 {
@@ -51,27 +41,28 @@ public:
 
 	/**
 	 *   @brief  Increments License stat count
-	 *   @param[in] window time window
+	 *   @param[in]  time window
 	 *   @return None
 	 */
 	void IncrementCount(std::string window);
 
 	/**
 	 *   @brief Calculates time window for latency report
-	 *   @param[in] timeMs time value
+	 *   @param[in]  time value
 	 *   @return string time window tag.
 	 */
 	std::string GetTimeWindow(long timeMs);
 
 	/**
 	 *   @brief  Converts class object data to Json object
+	 *   @param[in]  NONE
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;
 
 	/**
 	 *   @brief Record Latency Report
-	 *   @param[in] timeMs time in milli seconds
+	 *   @param[in]  time in milli seconds
 	 *
 	 *   @return NONE.
 	 */

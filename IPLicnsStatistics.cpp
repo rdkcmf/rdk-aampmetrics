@@ -15,19 +15,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-
-/**
- * @file CLicenseStatistics.cpp
- * @brief File contails the stat about the License for encrypted fragment
- */
-
+*/
 
 #include "IPLicnsStatistics.h"
 #include "StatsDefine.h"
 
 
 
+/**
+ *   @brief  Converts class object data to Json object
+ *
+ *   @param[in]  NONE
+ *
+ *   @return cJSON pointer
+ */
 cJSON * CLicenseStatistics::ToJson() const
 {
 	cJSON *monitor = NULL;
@@ -59,6 +60,12 @@ cJSON * CLicenseStatistics::ToJson() const
 }
 
 
+/**
+ *   @brief  Increments License stat count
+ *   @param[in]  VideoStatCountType
+ *
+ *   @return None
+ */
 void CLicenseStatistics::IncrementCount(VideoStatCountType type)
 {
     if( isInitialized )
@@ -85,7 +92,12 @@ void CLicenseStatistics::IncrementCount(VideoStatCountType type)
     }
 }
 
-
+/**
+ *   @brief  Records license stat
+ *   @param[in]  isEncypted indicates track or fragment is encrypted, based on this info clear to enc or enc to clear stats are incremented
+ *   @param[in]  isKeyChanged indicates if keychanged for encrypted fragment
+ *   @return None
+ */
 void CLicenseStatistics::Record_License_EncryptionStat(bool  isEncypted, bool isKeyChanged)
 {
     if(isInitialized)
