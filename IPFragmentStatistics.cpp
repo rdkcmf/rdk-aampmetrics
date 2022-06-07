@@ -17,15 +17,16 @@
  * limitations under the License.
 */
 
+/**
+ * @file IPFragmentStatistics.cpp
+ * @brief This file have the stats of IP fragments
+ */
+
 #include "IPFragmentStatistics.h"
 #include "StatsDefine.h"
 
 /**
  *   @brief  Converts class object data to Json object
- *
- *   @param[in]  NONE
- *
- *   @return cJSON pointer
  */
 cJSON * CFragmentStatistics::ToJson() const
 {

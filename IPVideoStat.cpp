@@ -31,14 +31,8 @@ bool g_ForPartnerApps = false;
 
 std::map<VideoStatTrackType, std::string> Track::StatTrackTypeStr;
 
-
-
 /**
  *   @brief Returns string of JSON object
- *
- *   @param[in]  None
- *
- *   @return char * - Note that caller is responsible for deleting memory allocated for string
  */
 char * CVideoStat::ToJsonString(const char* additionalData, bool forPA) const
 {
@@ -277,12 +271,6 @@ char * CVideoStat::ToJsonString(const char* additionalData, bool forPA) const
 /**
  *   @brief Increment Normal Fragment stats
  *
- *   @param[in] Track track - Indicates track for which Increment required
- *   @param[in] bitrate : profile bitrate
- *   @param[in] download time - download time
- *   @param[in] response - HTTP/CURL response
- *	 @param[in] bool - connection status flag
- *   @return None
  */
 void CVideoStat::Increment_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity)
 {
@@ -301,7 +289,7 @@ void CVideoStat::Increment_Fragment_Count(Track track, long bitrate, long downlo
  *   @param[in] bitrate : profile bitrate
  *   @param[in] download time - download time
  *   @param[in] response - HTTP/CURL response
- *	 @param[in] bool - connection status flag
+ *   @param[in] bool - connection status flag
  *   @return None
  */
 void CVideoStat::Increment_Init_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity)
@@ -316,15 +304,6 @@ void CVideoStat::Increment_Init_Fragment_Count(Track track, long bitrate, long d
 /**
  *   @brief Increment Manifest stats
  *
- *   @param[in] Track track - Indicates track for which Increment required
- *   @param[in] bitrate : profile bitrate
- *   @param[in] bitrate : profile bitrate ( 0 means Main HLS Mainifest or DASH manifest )
- *   @param[in] download time - download time
- *   @param[in] response - HTTP/CURL response
- *   @param[in] bool - connection status flag
- * 	 @param[in] manifestData - manifest details structure
- *
- *   @return None
  */
 void CVideoStat::Increment_Manifest_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity, ManifestData * manifestData)
 {
@@ -335,11 +314,6 @@ void CVideoStat::Increment_Manifest_Count(Track track, long bitrate, long downlo
 
 /**
  *   @brief   Records License stat based on isEncypted
- *
- *   @param[in] VideoStatTrackType - Indicates track
- *   @param[in] isEncypted - Indicates clear(false) or encrypted ( true)
- *   @param[in] isKeyChanged - indicates if key is changed for encrypted fragment
- *   @return None
  */
 void CVideoStat::Record_License_EncryptionStat(VideoStatTrackType eType, bool isEncypted, bool isKeyChanged, int audioIndex)
 {
@@ -348,10 +322,6 @@ void CVideoStat::Record_License_EncryptionStat(VideoStatTrackType eType, bool is
 
 /**
  *   @brief Sets URL for failed download fragments
- *
- *   @param[in]  long long time
- *
- *   @return None
  */
 void CVideoStat::SetFailedFragmentUrl(VideoStatTrackType eType, long bitrate, std::string url, int audioIndex)
 {
@@ -365,11 +335,6 @@ void CVideoStat::SetFailedFragmentUrl(VideoStatTrackType eType, long bitrate, st
 /**
  *   @brief sets Lang associated with Audio Tracks
  *
- *   @param[in]  VideoStatTrackType - Audio Track
- *   @param[in]  std::string lang string
- *   @param[in]  int audio track index
- *
- *   @return None
  */
 void CVideoStat::Setlanguage(VideoStatTrackType eType, std::string strLang, int audioIndex)
 {
@@ -383,15 +348,6 @@ void CVideoStat::Setlanguage(VideoStatTrackType eType, std::string strLang, int 
 /**
  *   @brief Increment stats ,
  *
- *   @param[in] VideoStatDataType - indicates type of Data ( e.g manifest/fragment/license etc )
- *   @param[in] VideoStatTrackType - Indicates track for which Increment required
- *   @param[in] bitrate : profile bitrate
- *   @param[in] download time - download time
- *   @param[in] response - HTTP/CURL response
- *   @param[in] bool - connection status flag
- *   @param[in] audioIndex - Audio track index
- * 	 @param[in] manifestData - manifest details structure
- *   @return None
  */
 void CVideoStat::Increment_Data(VideoStatDataType dataType,VideoStatTrackType eType, long bitrate , long downloadTimeMs, int response, bool connectivity, int audioIndex, ManifestData * manifestData)
 {
@@ -419,12 +375,6 @@ void CVideoStat::Increment_Data(VideoStatDataType dataType,VideoStatTrackType eT
 
 /**
  *   @brief Sets profile frame size
- *   @param[in]  Profile or track type
- *   @param[in]  int width
- *   @param[in]  int height
- *   @param[in]  int audio index
- *   @param[in]  bool capped profile status
- *   @return None
  */
 void CVideoStat::SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex)
 {
@@ -437,10 +387,6 @@ void CVideoStat::SetProfileResolution(VideoStatTrackType eType, long bitrate, in
 
 /**
  *   @brief Sets Display frame size
- *
- *   @param[in]  int width
- *   @param[in]  int height
- *   @return None
  */
 void CVideoStat::SetDisplayResolution(int width, int height)
 {
@@ -451,10 +397,6 @@ void CVideoStat::SetDisplayResolution(int width, int height)
 
 /**
 *   @brief increment gaps count between periods
-*
-*   @param[in]  None
-*
-*   @return None
 */
 void CVideoStat::IncrementGaps()
 {

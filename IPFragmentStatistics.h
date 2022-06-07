@@ -17,12 +17,20 @@
  * limitations under the License.
 */
 
+/**
+ * @file IPFragmentStatistics.cpp
+ * @brief This file have the stats of IP fragments
+ */
+
 #ifndef __FRAGMENT_STATISTICS_H__
 #define __FRAGMENT_STATISTICS_H__
 
 #include "IPHTTPStatistics.h"
 
-
+/**
+ * @class CFragmentStatistics
+ * @brief Class contains statistics of IP fragments
+ */
 class CFragmentStatistics
 {
 private:
@@ -97,7 +105,7 @@ public:
 	 *   @brief  gets Init Fragment stats object, Creates if not created
 	 *
 	 *   @param[in]  None
-     *
+     	 *
 	 *   @return None
 	 */
 	CHTTPStatistics * GetInitFragmentStat()
@@ -113,7 +121,7 @@ public:
 	 *   @brief  gets Normal Fragment stats object, Creates if not created
 	 *
 	 *   @param[in]  None
-     *
+     	 *
 	 *   @return None
 	 */
 	CHTTPStatistics * GetNormalFragmentStat()
@@ -129,7 +137,7 @@ public:
 	 *   @brief  Default Destructor
 	 *
 	 *   @param[in]  None
-     *
+     	 *
 	 *   @return None
 	 */
 	~CFragmentStatistics()
@@ -158,10 +166,10 @@ public:
 	}
 
 	/**
-	 *   @brief  Converts class object data to Json object
+	 *   @fn ToJson
 	 *
 	 *   @param[in]  NONE
-     *
+     	 *
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;

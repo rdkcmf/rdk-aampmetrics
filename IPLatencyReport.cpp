@@ -17,17 +17,17 @@
  * limitations under the License.
 */
 
+/**
+ * @file IPLatencyReport.h
+ * @brief This file holds information about Latency report
+ */
+
 #include "IPLatencyReport.h"
 #include "StatsDefine.h"
 
 
-
 /**
  *   @brief  Converts class object data to Json object
- *
- *   @param[in]  NONE
- *
- *   @return cJSON pointer
  */
 cJSON * CLatencyReport::ToJson() const
 {
@@ -60,9 +60,6 @@ cJSON * CLatencyReport::ToJson() const
 
 /**
  *   @brief  Increments Latency report count
- *   @param[in]  time window
- *
- *   @return None
  */
 void CLatencyReport::IncrementCount(std::string window)
 {
@@ -75,8 +72,6 @@ void CLatencyReport::IncrementCount(std::string window)
 
 /**
  *   @brief Calculates time window for latency report
- *   @param[in]  long time in milli seconds
- *   @return string time window tag.
  */
 std::string CLatencyReport::GetTimeWindow(long timeMs)
 {
@@ -92,9 +87,6 @@ std::string CLatencyReport::GetTimeWindow(long timeMs)
 
 /**
  *   @brief Record Latency Report
- *   @param[in]  long time in milli seconds
- *
- *   @return NONE.
  */
 void CLatencyReport::RecordLatency(long timeMs)
 {
