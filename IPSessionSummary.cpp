@@ -17,16 +17,17 @@
  * limitations under the License.
 */
 
+/**
+ * @file IPSessionSummary.cpp
+ * @brief This file handles operations on session summary report
+ */
+
 #include "IPSessionSummary.h"
 #include "StatsDefine.h"
 
 size_t CSessionSummary::totalErrorCount = 0;
 /**
  *   @brief  Converts class object data to Json object
- *
- *   @param[in]  NONE
- *
- *   @return cJSON pointer
  */
 cJSON * CSessionSummary::ToJson() const
 {
@@ -59,9 +60,6 @@ cJSON * CSessionSummary::ToJson() const
 
 /**
  *   @brief  Increments Latency report count
- *   @param[in]  time window
- *
- *   @return None
  */
 void CSessionSummary::IncrementCount(std::string response)
 {
@@ -73,9 +71,6 @@ void CSessionSummary::IncrementCount(std::string response)
 
 /**
  *   @brief Update session summary report
- *   @param[in]  long http/curl response
- * 	 @param[in] bool - connection status flag
- *   @return NONE.
  */
 void CSessionSummary::UpdateSummary(int response, bool connectivity)
 {

@@ -19,7 +19,7 @@
 
 /**
  * @file VideoStat.h
- * @brief
+ * @brief VideoStat data packing and storage
  */
 
 #ifndef __VIDEO_STAT_H__
@@ -35,7 +35,10 @@ typedef std::map<Track, MapProfileInfo>  MapStreamInfo; // collection of all Aud
 typedef std::map<Track, CLicenseStatistics>  MapLicenceInfo; // Licence stats for each track
 typedef std::map<Track, CFragmentStatistics> MapAdStreamInfo; //collection of ad audio/video fragments statistics
 
-
+/**
+ * @class CVideoStat
+ * @brief Contains the information/stat on Video
+ */
 class CVideoStat
 {
 private:
@@ -47,9 +50,9 @@ private:
 	int mNetworkDropCount;
 	int mErrorDropCount;
 	bool mbTsb;
-	int mDisplayWidth; // TV Display Width
-	int mDisplayHeight; // TV Display Height
-	bool mbProfileCapped; // Profile capping status
+	int mDisplayWidth;  	/**< TV Display Width */
+	int mDisplayHeight; 	/**< TV Display Height */
+	bool mbProfileCapped; 	/**< Profile capping status */
 	MapLicenceInfo mMapLicenseInfo;
 	MapStreamInfo mMapStreamInfo;
 	std::map<Track ,std::string> mMapLang;
@@ -76,8 +79,6 @@ public:
 	/**
 	 *   @brief Default Destructor
 	 *
-	 *   @param[in]  NONE
-         *
 	 *   @return None
 	 */
 	~CVideoStat()
@@ -88,7 +89,7 @@ public:
 	/**
 	 *   @brief Sets time latency for live playback
 	 *
-	 *   @param[in]  long long latency
+	 *   @param[in] latency  long long latency
          *
 	 *   @return None
 	 */
@@ -97,7 +98,7 @@ public:
 	/**
 	 *   @brief Sets playback mode (live/vod etc)
 	 *
-	 *   @param[in]  string playbackmode
+	 *   @param[in] playbackmode in string format
          *
 	 *   @return None
 	 */
@@ -107,17 +108,15 @@ public:
 	}
 
 	/**
-	 *   @brief increment gaps count between periods
+	 *   @fn IncrementGaps
 	 *
-	 *   @param[in]  string playbackmode
-         *
 	 *   @return None
 	 */
 	void IncrementGaps();
 	/**
 	 *   @brief Sets time to top Profile Time stat
 	 *
-	 *   @param[in]  long long time
+	 *   @param[in] time long long time
          *
 	 *   @return None
 	 */
@@ -126,7 +125,7 @@ public:
 	/**
 	 *   @brief Sets time AT top Profile Time stat
 	 *
-	 *   @param[in]  long long time
+	 *   @param[in] time long long time
          *
 	 *   @return None
 	 */
@@ -136,7 +135,7 @@ public:
 	 *   @brief Sets total duration of videoFragments downloaded
 	 *   Note that this is not Video Duration of Asset, as fragments can be re-downloaded in case of trick play
 	 *
-	 *   @param[in]  long long Duration
+	 *   @param[in] duration total duration of videoFragments downloaded
          *
 	 *   @return None
 	 */
@@ -146,8 +145,6 @@ public:
 	 *   @brief Increment NetworkDropCount
 	 *   This is count which indicates if bitrate drop happned due to Network bandwidth issue
 	 *
-	 *   @param[in] None
-         *
 	 *   @return None
 	 */
 	void Increment_NetworkDropCount() { mNetworkDropCount++; }
@@ -156,52 +153,50 @@ public:
 	 *   @brief Increment ErrorDropCount
 	 *   This is count which indicates if bitrate drop happned due to erros in downloads
 	 *
-	 *   @param[in] None
-         *
 	 *   @return None
 	 */
 	void Increment_ErrorDropCount() { mErrorDropCount++; }
 
 	/**
-	 *   @brief Increment Normal Fragment stats
+	 *   @fn Increment_Fragment_Count
 	 *
-	 *    @param[in] Track track - Indicates track for which Increment required
-	 *    @param[in]bitrate : profile bitrate
-	 *    @param[in] download time - download time
-	 *    @param[in] response - HTTP/CURL response
-	 *    @param[in] bool - connection status flag
+	 *   @param[in] Track track - Indicates track for which Increment required
+	 *   @param[in] bitrate  profile bitrate
+	 *   @param[in] download time - download time
+	 *   @param[in] response - HTTP/CURL response
+	 *   @param[in] connectivity - connection status flag
 	 *   @return None
 	 */
 	void Increment_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity);
 
 	/**
-	 *   @brief Increment Init Fragment stats ( used for dash case only )
+	 *   @fn Increment_Init_Fragment_Count
 	 *
-	 *    @param[in] Track track - Indicates track for which Increment required
-	 *    @param[in] bitrate : profile bitrate
-	 *    @param[in] download time - download time
-	 *    @param[in] response - HTTP/CURL response
-	 *    @param[in] bool - connection status flag
+	 *   @param[in] Track track - Indicates track for which Increment required
+	 *   @param[in] bitrate : profile bitrate
+	 *   @param[in] download time - download time
+	 *   @param[in] response - HTTP/CURL response
+	 *   @param[in] connectivity - connection status flag
 	 *
 	 *   @return None
 	 */
 	void Increment_Init_Fragment_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity);
 
 	/**
-	 *   @brief Increment Manifest stats
+	 *   @fn Increment_Manifest_Count
 	 *
-	 *    @param[in] Track track - Indicates track for which Increment required
-	 *    @param[in] bitrate : profile bitrate ( 0 means Main HLS Mainifest or DASH manifest )
-	 *    @param[in] download time - download time
-	 *    @param[in] response - HTTP/CURL response
-	 *    @param[in] bool - connection status flag
+	 *   @param[in] Track track - Indicates track for which Increment required
+	 *   @param[in] bitrate : profile bitrate ( 0 means Main HLS Mainifest or DASH manifest )
+	 *   @param[in] download time - download time
+	 *   @param[in] response - HTTP/CURL response
+	 *   @param[in] connectivity - connection status flag
 	 *
 	 *   @return None
 	 */
 	void Increment_Manifest_Count(Track track, long bitrate, long downloadTimeMs, int response, bool connectivity, ManifestData * manifestData = NULL);
 
 	/**
-	 *   @brief   Records License stat based on isEncypted
+	 *   @fn Record_License_EncryptionStat
 	 *
 	 *   @param[in] VideoStatTrackType - Indicates track
 	 *   @param[in] isEncypted - Indicates clear(false) or encrypted ( true)
@@ -211,7 +206,7 @@ public:
 	void Record_License_EncryptionStat(VideoStatTrackType eType, bool isEncypted, bool isKeyChanged, int audioIndex = 1);
 
 	/**
-	 *   @brief Increment stats ,
+	 *   @fn Increment_Data
 	 *
 	 *   @param[in] VideoStatDataType - indicates type of Data ( e.g manifest/fragment/license etc )
 	 *   @param[in] VideoStatTrackType - Indicates track for which Increment required
@@ -220,13 +215,13 @@ public:
 	 *   @param[in] response - HTTP/CURL response
 	 *   @param[in] bool - connection status flag
 	 *   @param[in] audioIndex- Audio track index
-	 * 	 @param[in] manifestData - manifest details structure
+	 *   @param[in] manifestData - manifest details structure
 	 *   @return None
 	 */
 	void Increment_Data(VideoStatDataType dataType,VideoStatTrackType eType, long bitrate, long downloadTimeMs, int response, bool connectivity, int audioIndex = 1, ManifestData * manifestData = nullptr);
 
 	/**
-	 *   @brief Sets URL for failed download fragments
+	 *   @fn SetFailedFragmentUrl
 	 *
 	 *   @param[in] VideoStatTrackType - Indicates track for which Increment required
 	 *   @param[in] bitrate : profile bitrate
@@ -237,29 +232,29 @@ public:
 	void SetFailedFragmentUrl(VideoStatTrackType eType, long bitrate, std::string url, int audioIndex = 1);
 
 	/**
-	 *   @brief Sets profile frame size
-	 *   @param[in]  Profile or track type
-	 *   @param[in]  int width
-	 *   @param[in]  int height
+	 *   @fn SetProfileResolution
+	 *   @param[in] eType Profile or track type
+	 *   @param[in] width int width
+	 *   @param[in] height int height
 	 *   @param[in] audioIndex- Audio track index
 	 *   @return None
 	 */
 	void SetProfileResolution(VideoStatTrackType eType, long bitrate, int width, int height, int audioIndex = 1);
 
 	/**
-	 *   @brief Sets Display frame size,
-	 *   @param[in]  int width
-	 *   @param[in]  int height
+	 *   @fn SetDisplayResolution
+	 *   @param[in] width int width
+	 *   @param[in] height int height
 	 *   @return None
 	 */
 	void SetDisplayResolution(int width, int height);
 
 	/**
-	 *   @brief sets Lang associated with Audio Tracks
+	 *   @fn Setlanguage
 	 *
-	 *   @param[in]  VideoStatTrackType - Audio Track
-	 *   @param[in]  std::string lang string
-	 *   @param[in]  Audio Track index
+	 *   @param[in] eType  VideoStatTrackType - Audio Track
+	 *   @param[in] strLang lang string
+	 *   @param[in] audioIndex Audio Track index
 	 *   @return None
 	 */
 	void Setlanguage(VideoStatTrackType eType, std::string strLang, int audioIndex);
@@ -281,11 +276,9 @@ public:
         void SetProfileCappedStatus(bool bProfileCapped) { mbProfileCapped = bProfileCapped;}
 
 	/**
-	 *   @brief Returns string of JSON object
+	 *   @fn ToJsonString
 	 *
-	 *   @param[in]  None
-	 *
-	 *   @return char * - Note that caller is responsible for deleting memory allocated for string
+	 *   @return Json string - Note that caller is responsible for deleting memory allocated for string
 	 */
 	char * ToJsonString(const char* additionalData = nullptr, bool forPA = false) const;
 };

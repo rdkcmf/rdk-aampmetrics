@@ -17,6 +17,11 @@
  * limitations under the License.
 */
 
+/**
+ * @file IPSessionSummary.h
+ * @brief This file handles information on session summary report
+ */
+
 #include <stdio.h>
 #include <map>
 #include <string>
@@ -28,6 +33,10 @@
 
 typedef std::map<std::string, unsigned int>  MapSessionSummary; // Session summary stats for each profile
 
+/**
+ * @class CSessionSummary
+ * @brief Holds the information about session summary report
+ */
 class CSessionSummary
 {
 private:
@@ -40,23 +49,22 @@ public:
 	//Keeps track of all the error counts across profiles
 	static size_t totalErrorCount;
 	/**
-	 *   @brief  Increments summary stat count
-	 *   @param[in]  HTTP/CURL response
+	 *   @fn IncrementCount
+	 *   @param[in] response HTTP/CURL response
 	 *   @return None
 	 */
 	void IncrementCount(std::string response);
 
 	/**
-	 *   @brief  Converts class object data to Json object
-	 *   @param[in]  NONE
+	 *   @fn ToJson
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;
 
 	/**
-	 *   @brief Update session summary report
-	 *   @param[in]  int http/curl response
-	 *	 @param[in] bool - connection status flag
+	 *   @fn UpdateSummary
+	 *   @param[in] response, http/curl response
+	 *   @param[in] connectivity - connection status flag
 	 *   @return NONE.
 	 */
 	void UpdateSummary(int response, bool connectivity);

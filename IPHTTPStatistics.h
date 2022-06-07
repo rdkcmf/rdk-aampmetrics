@@ -17,6 +17,11 @@
  * limitations under the License.
 */
 
+/**
+ * @file IPHTTPStatistics.cpp
+ * @brief This file handles the opertions to manage the HTTP statistics for all video types
+ */
+
 #ifndef __HTTP_STATISTICS_H__
 #define __HTTP_STATISTICS_H__
 
@@ -27,8 +32,9 @@
 #define COUNT_NONE	0
 #define VIDEO_END_DATA_VERSION		"2.0"
 
-/*
- * Defines Video Stat count type
+/**
+ * @enum VideoStatCountType
+ * @brief Defines Video Stat count type
  */
 typedef enum E_VideoStatCountType {
 	COUNT_UNKNOWN,
@@ -38,8 +44,9 @@ typedef enum E_VideoStatCountType {
 } VideoStatCountType;
 
 
-/*
- *  Class to store all Video stats common to all download types
+/**
+ * @class CHTTPStatistics
+ * @brief Class to store all Video stats common to all download types
  */
 class CHTTPStatistics
 {
@@ -173,18 +180,18 @@ public:
 	}
 	
 	/**
-	 *   @brief  Increment stat count
+	 *   @fn IncrementCount
 	 *
 	 *   @param[in]  download time
 	 *   @param[in]  HTTP/CURL response code
-	 * 	 @param[in] bool - connection status flag
-	 *	@param[in] manifestData - connection status flag
-	 *   @return None
+	 *   @param[in] bool - connection status flag
+	 *   @param[in] manifestData - connection status flag
+	 *   @return void
 	 */
 	void IncrementCount(long downloadTimeMs, int responseCode, bool connectivity, ManifestData * manifestData = nullptr);
 
 	/**
-	 *   @brief  Converts class object data to Json object
+	 *   @fn ToJson
 	 *
 	 *   @param[in]  NONE
 	 *

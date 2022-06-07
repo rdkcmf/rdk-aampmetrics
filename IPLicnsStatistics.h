@@ -17,6 +17,10 @@
  * limitations under the License.
 */
 
+/**
+ * @file CLicenseStatistics.h
+ * @brief File contails the stat about the License for encrypted fragment
+ */
 
 // NOTE - protex_scan is failing hence changed file name from LicenseStatistics.h LicnStatistics.h
 
@@ -25,12 +29,16 @@
 
 #include "IPHTTPStatistics.h"
 
+/**
+ * @class CLicenseStatistics
+ * @brief Contain the License information for encrypted contents
+ */
 class CLicenseStatistics
 {
 private:
-	int mTotalRotations; // total liecense rotation/switch
-	int mTotalEncryptedToClear; // Encrypted to clear liecense switch
-	int mTotalClearToEncrypted; // Clear to encrypted liecense switch
+	int mTotalRotations; 		/**< total liecense rotation/switch */
+	int mTotalEncryptedToClear; 	/**< Encrypted to clear liecense switch */
+	int mTotalClearToEncrypted; 	/**< Clear to encrypted liecense switch */
 	bool mbEncypted;
 	// First call to reporting data will set this variable to true,
 	// this is used to avoid recording license data of stream starts with encrypted content and never transition to clear.
@@ -43,7 +51,7 @@ public:
 	}
 
 	/**
-	 *   @brief  Records license stat
+	 *   @fn Record_License_EncryptionStat
 	 *   @param[in]  isEncypted indicates track or fragment is encrypted, based on this info clear to enc or enc to clear stats are incremented
 	 *   @param[in]  isKeyChanged indicates if keychanged for encrypted fragment
 	 *   @return None
@@ -51,17 +59,15 @@ public:
 	void Record_License_EncryptionStat(bool isEncypted, bool isKeyChanged);
 
 	/**
-	 *   @brief  Increments License stat count
-	 *   @param[in]  VideoStatCountType
+	 *   @fn IncrementCount
+	 *   @param[in] type  VideoStatCountType
 	 *   @return None
 	 */
 	void IncrementCount(VideoStatCountType type);
 
 	/**
-	 *   @brief  Converts class object data to Json object
+	 *   @fn ToJson
 	 *
-	 *   @param[in]  NONE
-     *
 	 *   @return cJSON pointer
 	 */
 	cJSON * ToJson() const;
