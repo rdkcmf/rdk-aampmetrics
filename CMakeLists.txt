@@ -29,7 +29,12 @@ set(LIB_SOURCES IPHTTPStatistics.cpp
 	    IPProfileInfo.cpp
 	    IPSessionSummary.cpp
 	    IPLatencyReport.cpp
-	    ManifestGenericStats.cpp)
+	    ManifestGenericStats.cpp
+	    CMCDHeaders.cpp 
+	    VideoCMCDHeaders.cpp
+	    AudioCMCDHeaders.cpp
+	    SubtitleCMCDHeaders.cpp
+	    ManifestCMCDHeaders.cpp)
 
 add_library(metrics SHARED ${LIB_SOURCES})
 
@@ -49,6 +54,6 @@ endif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
 
 target_link_libraries(metrics "-lcjson")
 
-set_target_properties(metrics PROPERTIES PUBLIC_HEADER "IPVideoStat.h")
+set_target_properties(metrics PROPERTIES PUBLIC_HEADER "IPVideoStat.h;CMCDHeaders.h;VideoCMCDHeaders.h;AudioCMCDHeaders.h;SubtitleCMCDHeaders.h;ManifestCMCDHeaders.h")
 install(TARGETS metrics DESTINATION lib PUBLIC_HEADER DESTINATION include)
-install(FILES IPHTTPStatistics.h IPFragmentStatistics.h IPLicnsStatistics.h IPProfileInfo.h IPSessionSummary.h IPLatencyReport.h StatsDefine.h ManifestGenericStats.h DESTINATION include)
+install(FILES IPHTTPStatistics.h IPFragmentStatistics.h IPLicnsStatistics.h IPProfileInfo.h IPSessionSummary.h IPLatencyReport.h StatsDefine.h ManifestGenericStats.h CMCDHeaders.h VideoCMCDHeaders.h AudioCMCDHeaders.h SubtitleCMCDHeaders.h ManifestCMCDHeaders.h DESTINATION include)
